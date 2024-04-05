@@ -1,0 +1,22 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "expressfile",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daltontahy/Hashrate-Monitoring.git"
+  },
+  "author": "daltontahy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daltontahy/Hashrate-Monitoring/issues"
+  },
+  "homepage": "https://github.com/daltontahy/Hashrate-Monitoring#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
