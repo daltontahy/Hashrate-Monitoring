@@ -1,33 +1,21 @@
-const express = require ('express');
+// index.js
+
+const express = require('express');
+const getMiningStats = require('./algostats');
+
 const app = express();
-const cors = require('cors'); // Import the cors middleware
-var MiningPoolHub = require('miningpoolhub');
+const port = 3001; // Specify the port you want to run your backend on
 
-// Set up options, including your API key
-var options = {
-  "api_key": "e00ddc7265057335529e77eb9978ac25b3b5cc427cbe852efcb569e34500e9ec"
-};
-
-app.use(cors());
-
-
-var miningPoolHub = new MiningPoolHub(options);
-
-// Endpoint to get user balances data
-app.get('/user-balances', (req, res) => {
-  // Retrieve user balances data using the miningpoolhub npm package
-  miningPoolHub.getuserallbalances(function(err, data) {
-    if (err) {
-      console.error('Error fetching user balances:', err);
-      res.status(500).json({ error: 'Internal server error' });
-    } else {
-      // Send user balances data as JSON response
-      res.json(data);
+app.get('/api/mining/algo/stats', async (req, res) => {
+    try {
+        const miningStats = await getMiningStats();
+        res.json(miningStats);
+    } catch (error) {
+        console.error('Error fetching mining algorithm statistics:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is listening at http://localhost:${port}`);
 });

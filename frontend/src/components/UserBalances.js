@@ -1,60 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import Axios for making HTTP requests
 
 function UserBalances() {
-  // Define state to hold user balances data and loading state
-  const [balances, setBalances] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // State to hold the mining algorithm statistics
+  const [algorithmStats, setAlgorithmStats] = useState({});
 
-  // Fetch user balances data from backend API
+  // Function to fetch mining algorithm statistics from the server
+  const fetchAlgorithmStats = async () => {
+    try {
+      const response = await axios.get('https://api2.nicehash.com/main/api/v2/mining/algo/stats');
+      setAlgorithmStats(response.data); // Set the fetched data to state
+    } catch (error) {
+      console.error('Error fetching algorithm stats:', error);
+    }
+  };
+
+  // Fetch mining algorithm statistics when the component mounts
   useEffect(() => {
-    // Define the endpoint URL of your backend API
-    const apiUrl = 'http://localhost:3000/user-balances';
+    fetchAlgorithmStats();
+  }, []); // Empty dependency array ensures the effect runs only once after initial render
 
-    // Fetch user balances data from the API
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch user balances');
-        }
-        return response.json(); // Parse response body as JSON
-      })
-      .then(data => {
-        console.log('User balances data:', data); // Log user balances data
-        const balancesArray = data.getuserallbalances.data;
-        setBalances(balancesArray); // Set user balances data in state
-        setLoading(false); // Update loading state
-      })
-      .catch(error => {
-        console.error('Error fetching user balances:', error);
-        setError(error.message); // Set error message in state
-        setLoading(false); // Update loading state
-      });
-  }, []); // Run effect only once on component mount
-
-  // Render loading state while data is being fetched
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // Render error message if there was an error fetching data
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  // Render balances data
   return (
     <div>
       <h2>User Balances</h2>
-      {balances.length === 0 ? (
-        <div>No balances available</div>
-      ) : (
-        <ul>
-          {balances.map((balance, index) => (
-            <li key={index}>{balance.coin}: {balance.balance}</li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {/* Iterate over each algorithm in the algorithmStats object */}
+        {Object.entries(algorithmStats).map(([algorithm, stats]) => (
+          <li key={algorithm}>
+            <strong>{algorithm}</strong>: 
+            {/* Display the mining algorithm statistics */}
+            <ul>
+              <li>Unpaid: {stats.unpaid}</li>
+              <li>Display Suffix: {stats.displaySuffix}</li>
+              <li>Active: {stats.isActive ? 'Yes' : 'No'}</li>
+            </ul>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
