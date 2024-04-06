@@ -1,20 +1,27 @@
 const express = require ('express');
 const app = express();
 
+var MiningPoolHub = require('miningpoolhub');
+
+// Set up options, including your API key
+var options = {
+  "api_key": "e00ddc7265057335529e77eb9978ac25b3b5cc427cbe852efcb569e34500e9ec"
+};
+
+var miningPoolHub = new MiningPoolHub(options);
+
+// Example: Get user's balances
+miningPoolHub.getuserallbalances(function(err, data) {
+  if (err) {
+    console.error('Error:', err);
+  } else {
+    console.log('User balances:', data);
+  }
+});
+
+
 app.get('/', (req, res) => {
   res.send('Welcome to Express!');
-});
-
-app.get('/hash-rates', (req, res) => {
-    res.send('Hash rates endpoint');
-});
-
-app.get('/temperatures', (req, res) => {
-        res.send('Temperatures endpoint');
-});
-
-app.get('/hash-rates', (req, res) => {
-    res.send('Hash rates endpoint');
 });
 
 const PORT = process.env.PORT || 3000;
