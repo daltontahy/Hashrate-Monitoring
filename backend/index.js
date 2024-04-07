@@ -1,10 +1,8 @@
-// index.js
-
 const express = require('express');
 const getMiningStats = require('./algostats');
 
 const app = express();
-const port = 3001; // Specify the port you want to run your backend on
+const port = process.env.PORT || 3001; // Use the PORT environment variable if provided, otherwise default to 3001
 
 app.get('/api/mining/algo/stats', async (req, res) => {
     try {
@@ -16,6 +14,4 @@ app.get('/api/mining/algo/stats', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is listening at http://localhost:${port}`);
-});
+module.exports = app; // Export the Express app for use with Vercel
