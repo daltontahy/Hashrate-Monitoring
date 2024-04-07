@@ -1,1 +1,0 @@
-# Hashrate-Monitoring
